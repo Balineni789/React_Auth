@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import './Auth.css';
+import Home from "./Home";
 
 const firebaseConfig = {
     apiKey: "AIzaSyChqz1liDeBjgpUci4O-K-EMemq8DXoUhQ",
@@ -22,6 +23,7 @@ const Login = ({ onSwitchToRegister }) => {
     const [password, setPassword] = useState('');
     const [buttonText, setButtonText] = useState('Sign In');
     const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -41,7 +43,7 @@ const Login = ({ onSwitchToRegister }) => {
                 const user = userCredential.user;
                 toast.success("Signed in successfully! Redirecting...", { autoClose: 3000 });
                 setTimeout(() => {
-                    window.location.href = "/Homepage.html";
+                    setIsLoggedIn(true);
                 }, 2000);
             })
             .catch((err) => {
@@ -52,6 +54,11 @@ const Login = ({ onSwitchToRegister }) => {
                 setButtonText('Sign In');
             });
     };
+
+    // Show Home component if logged in
+    if (isLoggedIn) {
+        return <Home />;
+    }
 
     return (
         <div className="login-container">
